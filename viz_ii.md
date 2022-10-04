@@ -389,3 +389,53 @@ tmax_tmin_p /(precp_dens_p + tmax_date_p)
     ## Removed 3 rows containing missing values (geom_point).
 
 ![](viz_ii_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+
+## Data manipulation
+
+Control your factors
+
+``` r
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+What if I wanted densities for tmin and tmax simultaneously?
+
+``` r
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = 0.5)
+```
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation",
+    values_to = "temperatures"
+  ) %>% 
+  ggplot(aes(x = temperatures, fill = observation)) +
+  geom_density(alpha = 0.5) +
+  facet_grid(.~ name)
+```
+
+    ## Warning: Removed 18 rows containing non-finite values (stat_density).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
