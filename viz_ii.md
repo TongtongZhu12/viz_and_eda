@@ -312,3 +312,80 @@ central_park =
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](viz_ii_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+## `patchwork`
+
+remember faceting?
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = 0.5) +
+  facet_grid(.~ name)
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_density).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+what happens when you want multipanel plots but can’t facet …?
+
+``` r
+tmax_tmin_p =
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name))+
+  geom_point(alpha = 0.5) +
+  theme(legend.position = "none")
+
+precp_dens_p =
+  weather_df %>% 
+  filter(prcp >0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = 0.5) +
+  theme(legend.position = "none")
+
+tmax_date_p =
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "none")
+
+tmax_tmin_p + precp_dens_p + tmax_date_p
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+tmax_tmin_p +(precp_dens_p + tmax_date_p)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+    ## Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+``` r
+tmax_tmin_p /(precp_dens_p + tmax_date_p)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+    ## Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
