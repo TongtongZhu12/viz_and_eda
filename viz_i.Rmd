@@ -45,11 +45,21 @@ weather_df %>%
   geom_point()
 ```
 
+Drop the missing data.
+```{r}
+weather_df %>% 
+  drop_na() %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point()
+```
+
+
 Save and edit a plot object.
 
 ```{r}
 weather_plot =
   weather_df %>% 
+  drop_na() %>% 
   ggplot(aes(x = tmin, y = tmax))
 
 weather_plot + geom_point()
@@ -58,6 +68,7 @@ weather_plot + geom_point()
 ## Advanced scatterplot ...
 
 Start with the same one and make it fancy!
+Note: when you put the color= name inside the ggplot (), the color will be applied for all the point. When you use geom-smooth, you will see three lines. But you put the color =name after the geom-point()， you can only see one line.
 
 ```{r}
 weather_df %>% 
@@ -84,6 +95,15 @@ weather_df %>%
   geom_smooth(se = FALSE) +
   facet_grid(. ~ name)
 ```
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  facet_grid(name ~ .)
+```
+
 
 Make the spot transparent using `alpha`, change the point size, change the smooth line size
 
@@ -195,7 +215,7 @@ weather_df %>%
 
 ```{r}
 weather_df %>% 
-  ggplot(aes(x = name, y = tmin)) +
+  ggplot(aes(x = name, y = tmin, fill = name)) +
   geom_boxplot()
 ```
 
@@ -234,7 +254,10 @@ weather_plot =
   ggplot(aes(x = tmin, y = tmax, color = name)) +
   geom_point(alpha = 0.5)
 
-ggsave("weather_plot.pdf", weather_plot, width = 8, height =5)
+ggsave(
+  file = "weather_plot.pdf", 
+  plot = weather_plot, 
+  width = 8, height =5)
 
 ```
 
